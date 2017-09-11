@@ -1,9 +1,12 @@
+<% hidden_headers ||= [] %>
 <table id="data-table" class="shared-table">
   <thead>
     <tr>
       <th></th>
       <% headers.each do |header| %>
-        <th><%= header %></th>
+        <th class="<%= hidden_headers.include?(header) ? 'hidden' : '' %>">
+          <%= header %>
+        </th>
       <% end %>
     </tr>
   </thead>
@@ -24,7 +27,10 @@
  window.onload = function() {
    $('#data-table').DataTable({
      "order": [[ 1, "desc" ]],
-     "stateSave": true
+     "stateSave": true,
+     "columnDefs": [
+       { "targets": "hidden", "visible": false },
+     ]
    });
  };
 </script>
