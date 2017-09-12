@@ -4,9 +4,7 @@
     <tr>
       <th></th>
       <% headers.each do |header| %>
-        <th class="<%= hidden_headers.include?(header) ? 'hidden' : '' %>">
-          <%= header %>
-        </th>
+          <th><%= header %></th>
       <% end %>
     </tr>
   </thead>
@@ -37,7 +35,10 @@
        })
      },
      "columnDefs": [
-       { "targets": "hidden", "visible": false },
+       {
+         "targets": <%= hidden_headers.map { |hh| headers.index(hh) } %>,
+         "visible": false
+       },
      ]
    });
  };
