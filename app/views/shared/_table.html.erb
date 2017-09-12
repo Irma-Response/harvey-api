@@ -28,6 +28,14 @@
    $('#data-table').DataTable({
      "order": [[ 1, "desc" ]],
      "stateSave": true,
+     "stateSaveParams": function (settings, data) {
+       const savableKeys = ["search"]
+       Object.keys(data).forEach(function(key) {
+         if (!savableKeys.includes(key)) {
+           delete data[key]
+         }
+       })
+     },
      "columnDefs": [
        { "targets": "hidden", "visible": false },
      ]
