@@ -1,3 +1,5 @@
+require 'net/http'
+
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
@@ -17,5 +19,13 @@ class ApplicationController < ActionController::Base
     if !admin?
       redirect_to request.referrer || root_path, notice: "Admins Only! :|"
     end
+  end
+
+  def send_slack_notification msg
+    uri = URI('https://slack.com/api/chat.postMessage')
+    params = { :token => Rails.application.secrets.slack_token, :channel => Rails.application.secrets.slack_channel, :text => msg, :pretty => 1 }
+    uri.query = URI.encode_www_form(params)
+
+    Net::HTTP.get_response(uri)
   end
 end

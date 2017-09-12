@@ -29,6 +29,7 @@ class LocationsController < ApplicationController
       if draft.save
         path = location_draft_path(organization: @organization, legacy_table_name: @legacy_table_name, id: draft.id)
         redirect_to path, notice: 'Your new location is pending approval.'
+        send_slack_notification "New Location: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         @location = location_class.new(location_update_params)
         render :new
@@ -56,6 +57,7 @@ class LocationsController < ApplicationController
       if draft.save
         path = location_draft_path(organization: @organization, legacy_table_name: @legacy_table_name, id: draft.id)
         redirect_to path, notice: "#{location_class.legacy_table_display_name} update is pending approval."
+        send_slack_notification "Location updated: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         render :edit
       end

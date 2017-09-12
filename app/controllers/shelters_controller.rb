@@ -26,6 +26,7 @@ class SheltersController < ApplicationController
 
       if draft.save
         redirect_to draft, notice: 'Your new shelter is pending approval.'
+        send_slack_notification "New shelter added: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         @shelter = Shelter.new(shelter_update_params)
         render :new
@@ -51,6 +52,7 @@ class SheltersController < ApplicationController
 
       if draft.save
         redirect_to draft, notice: 'Your shelter update is pending approval.'
+        send_slack_notification "Shelter updated: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         render :edit
       end

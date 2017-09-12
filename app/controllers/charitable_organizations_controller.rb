@@ -25,6 +25,7 @@ class CharitableOrganizationsController < ApplicationController
 
       if draft.save
         redirect_to draft, notice: 'Your new Charitable Organization is pending approval.'
+        send_slack_notification "New CharitableOrganization: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         @charitable_organization = CharitableOrganization.new(charitable_organization_update_params)
         render :new
@@ -63,6 +64,7 @@ class CharitableOrganizationsController < ApplicationController
 
       if draft.save
         redirect_to draft, notice: 'Your Charitable Organization update is pending approval.'
+        send_slack_notification "CharitableOrganization Updated: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         render :edit
       end

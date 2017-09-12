@@ -25,6 +25,7 @@ class NeedsController < ApplicationController
 
       if draft.save
         redirect_to draft, notice: 'Your new need is pending approval.'
+        send_slack_notification "New need added: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         @need = Need.new(need_update_params)
         render :new
@@ -63,6 +64,7 @@ class NeedsController < ApplicationController
 
       if draft.save
         redirect_to draft, notice: 'Your need update is pending approval.'
+        send_slack_notification "Need updated: https://irma-api.herokuapp.com/drafts/#{draft.id}"
       else
         render :edit
       end
