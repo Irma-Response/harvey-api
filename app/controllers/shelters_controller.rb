@@ -88,15 +88,10 @@ class SheltersController < ApplicationController
   end
 
   def set_index_headers
-    if(admin?)
-      columns = (Shelter::ColumnNames + Shelter::PrivateFields) - Shelter::IndexHiddenColumnNames
-      @columns = columns
-      @headers = columns.map(&:titleize)
-    else
-      columns = Shelter::ColumnNames - Shelter::IndexHiddenColumnNames
-      @columns = columns
-      @headers = columns.map(&:titleize)
-    end
+    @columns = Shelter::ColumnNames
+    @columns += Shelter::PrivateFields if admin?
+    @headers = @columns.map(&:titleize)
+    @hidden_headers = Shelter::IndexHiddenColumnNames.map(&:titleize)
   end
 
   def set_shelter

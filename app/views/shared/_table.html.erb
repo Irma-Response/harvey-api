@@ -1,9 +1,10 @@
+<% hidden_headers ||= [] %>
 <table id="data-table" class="shared-table">
   <thead>
     <tr>
       <th></th>
       <% headers.each do |header| %>
-        <th><%= header %></th>
+          <th><%= header %></th>
       <% end %>
     </tr>
   </thead>
@@ -24,7 +25,21 @@
  window.onload = function() {
    $('#data-table').DataTable({
      "order": [[ 1, "desc" ]],
-     "stateSave": true
+     "stateSave": true,
+     "stateSaveParams": function (settings, data) {
+       const savableKeys = ["search"]
+       Object.keys(data).forEach(function(key) {
+         if (!savableKeys.includes(key)) {
+           delete data[key]
+         }
+       })
+     },
+     "columnDefs": [
+       {
+         "targets": <%= JSON.generate(hidden_headers.map { |hh| headers.index(hh) }) %>,
+         "visible": false
+       },
+     ]
    });
  };
 </script>
